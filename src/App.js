@@ -1,5 +1,6 @@
 import "./App.css";
 import React, { Component } from "react";
+import axios from 'axios';
 
 const DEFAULT_QUERY = "";
 const DEFAULT_HPP = "100";
@@ -17,6 +18,7 @@ class App extends Component {
       result: null,
       searchTerm: DEFAULT_QUERY
     };
+    this.needsToSearchTopStories = this.needsToSearchTopStories.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
     this.onDismiss = this.onDismiss.bind(this);
@@ -39,11 +41,8 @@ class App extends Component {
   }
 
   fetchSearchTopStories(searchTerm, page = 0) {
-    fetch(
-      `${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`
-    )
-      .then((response) => response.json())
-      .then((result) => this.setSearchTopStories(result))
+    axios(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`)
+      .then(result => this.setSearchTopStories(result.data))
       .catch((error) => error);
   }
 
